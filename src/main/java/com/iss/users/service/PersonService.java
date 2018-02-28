@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Interface for handling SQL operator in PersonCache
  * @program: users
- * @author: ISS12
+ * @author: 李泰郎
  * @create: 2018-02-27 19:18
  **/
 
