@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class IgniteCfg {
+
     /**
      * 初始化ignite节点信息
      * @return Ignite
