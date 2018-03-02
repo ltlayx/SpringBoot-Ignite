@@ -20,6 +20,6 @@ public interface PersonRepository extends IgniteRepository<Person, Long>{
      * @param name Person name.
      * @return The person whose name is the given name.
      */
-    Person findByName(String name);
+    Person findByUsername(String name);
 
 }

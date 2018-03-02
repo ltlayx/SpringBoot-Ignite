@@ -28,6 +28,7 @@ public class PersonServiceImpl implements PersonService{
      * @return The Person object saved in Ignite DB.
      */
     public Person save(Person person) {
+        // If this username is not used then return null, if is used then return this Person
         return personRepository.save(person.getId(), person);
     }
 
@@ -36,8 +37,8 @@ public class PersonServiceImpl implements PersonService{
      * @param name Person name.
      * @return The person found in Ignite DB
      */
-    public Person findPersonByName(String name){
-        return personRepository.findByName(name);
+    public Person findPersonByUsername(String name){
+        return personRepository.findByUsername(name);
     }
 
 }

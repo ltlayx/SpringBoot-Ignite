@@ -25,5 +25,5 @@ public interface PersonService {
      * @param name Person name.
      * @return The person found in Ignite DB
      */
-    Person findPersonByName(String name);
+    Person findPersonByUsername(String name);
 }

@@ -1,8 +1,15 @@
 package com.iss.users;
 
+import com.iss.users.config.JwtFilter;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.ignite.springdata.repository.config.EnableIgniteRepositories;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+
+import java.util.Date;
 
 /**
  * @program: users
@@ -31,7 +38,22 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @EnableIgniteRepositories
 public class UsersApplication {
+
+    @Bean
+    public FilterRegistrationBean jwtFilter() {
+        final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+        registrationBean.setFilter(new JwtFilter());
+        registrationBean.addUrlPatterns("/secure/*");
+
+        return registrationBean;
+    }
+
 	public static void main(String[] args) {
+//	    String email = "lll@123.com";
+//	    String jwtToken = Jwts.builder().setSubject(email).claim("roles", "user").setIssuedAt(new Date())
+//                .signWith(SignatureAlgorithm.HS256, "test").compact();
+//
+//	    System.out.println(jwtToken);
 		SpringApplication.run(UsersApplication.class, args);
 	}
 }

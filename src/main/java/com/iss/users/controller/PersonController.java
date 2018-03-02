@@ -1,13 +1,17 @@
 package com.iss.users.controller;
 
 import com.iss.users.model.Person;
+import com.iss.users.model.ReqPerson;
+import com.iss.users.model.Role;
 import com.iss.users.service.PersonService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.ServletException;
+import java.util.*;
 
 /**
  * @program: users
@@ -20,25 +24,56 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
+
     /**
-     * Save a person with name and phone sent by front end.
-     * @param name Person name.
-     * @param phone Person phone.
-     * @return The person saved in ignite DB
+     * User register with whose username and password
+     * @param reqPerson
+     * @return Success message
+     * @throws ServletException
      */
-    @RequestMapping("/person")
-    public Person savePerson(@RequestParam(value = "name") String name, @RequestParam(value = "phone") String phone){
-        return personService.save(new Person(name, phone));
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String register(@RequestBody() ReqPerson reqPerson) throws ServletException {
+        // Check if username and password is null
+        if (reqPerson.getUsername() == "" || reqPerson.getUsername() == null
+                || reqPerson.getPassword() == "" || reqPerson.getPassword() == null)
+            throw new ServletException("Username or Password invalid!");
+
+        // Check if the username is used
+        if(personService.findPersonByUsername(reqPerson.getUsername()) != null)
+            throw new ServletException("Username is used!");
+
+        // Give a default role : MEMBER
+        List<Role> roles = new ArrayList<Role>();
+        roles.add(Role.MEMBER);
+
+        // Create a person in ignite
+        personService.save(new Person(reqPerson.getUsername(), reqPerson.getPassword(), roles));
+        return "Register Success!";
     }
 
     /**
-     * Find a person with given name sent by front end.
-     * @param name Person name.
-     * @return The person found in ignite DB
+     * Check user`s login info, then create a jwt token returned to front end
+     * @param reqPerson
+     * @return jwt token
+     * @throws ServletException
      */
-    @RequestMapping("/persons")
-    public Person savePerson(@RequestParam(value = "name") String name){
-        return personService.findPersonByName(name);
-    }
+    @PostMapping
+    public String login(@RequestBody() ReqPerson reqPerson) throws ServletException {
+        // Check if username and password is null
+        if (reqPerson.getUsername() == "" || reqPerson.getUsername() == null
+                || reqPerson.getPassword() == "" || reqPerson.getPassword() == null)
+            throw new ServletException("Please fill in username and password");
 
+        // Check if the username is used
+        if(personService.findPersonByUsername(reqPerson.getUsername()) == null
+                || !reqPerson.getPassword().equals(personService.findPersonByUsername(reqPerson.getUsername()).getPassword())){
+            throw new ServletException("Please fill in username and password");
+        }
+
+        // Create Twt token
+        String jwtToken = Jwts.builder().setSubject(reqPerson.getUsername()).claim("roles", "member").setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, "secretkey").compact();
+
+        return jwtToken;
+    }
 }
