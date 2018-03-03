@@ -49,11 +49,6 @@ public class UsersApplication {
     }
 
 	public static void main(String[] args) {
-//	    String email = "lll@123.com";
-//	    String jwtToken = Jwts.builder().setSubject(email).claim("roles", "user").setIssuedAt(new Date())
-//                .signWith(SignatureAlgorithm.HS256, "test").compact();
-//
-//	    System.out.println(jwtToken);
 		SpringApplication.run(UsersApplication.class, args);
 	}
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/secure")
 public class SecureController {
 
-    @RequestMapping("/user/users")
+    @RequestMapping("/users/user")
     public String loginSuccess() {
         return "Login Successful!";
     }
