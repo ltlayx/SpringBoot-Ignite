@@ -8,7 +8,10 @@ package com.iss.users.model;
  * @create: 2018-03-01 09:44
  **/
 public class ReqPerson {
+    /** Request username */
     private String username;
+
+    /** Request password */
     private String password;
 
     public ReqPerson() {

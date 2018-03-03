@@ -1,15 +1,8 @@
 package com.iss.users;
 
-import com.iss.users.config.JwtFilter;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.ignite.springdata.repository.config.EnableIgniteRepositories;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
-
-import java.util.Date;
 
 /**
  * @program: users
@@ -38,16 +31,6 @@ import java.util.Date;
 @SpringBootApplication
 @EnableIgniteRepositories
 public class UsersApplication {
-
-    @Bean
-    public FilterRegistrationBean jwtFilter() {
-        final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setFilter(new JwtFilter());
-        registrationBean.addUrlPatterns("/secure/*");
-
-        return registrationBean;
-    }
-
 	public static void main(String[] args) {
 		SpringApplication.run(UsersApplication.class, args);
 	}
