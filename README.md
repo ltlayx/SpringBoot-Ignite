@@ -51,7 +51,8 @@
 		controller包中` PersonController ` 用于处理用户的登录注册时生成JWT，` SecureController ` 用于测试JWT
 		model包中` JwtFilter ` 用于处理与验证JWT的正确性 
 		其余的是属于Ignite数据库访问的相关内容
-		![这里写图片描述](http://img.blog.csdn.net/2018031013062318?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbHRsMTEyMzU4/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+		
+![这里写图片描述](http://img.blog.csdn.net/2018031013062318?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbHRsMTEyMzU4/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 - ` JwtCfg ` 类
 		这个类中声明了一个` @Bean ` 	，用于生成一个过滤器类，对` /secure` 链接下的所有资源访问进行JWT的验证 
 ```
