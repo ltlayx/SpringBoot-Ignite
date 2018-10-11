@@ -29,23 +29,25 @@ public class IgniteCfg {
      */
     @Bean
     public Ignite igniteInstance(){
-        // 配置IgniteConfiguration
+        // 配置一个节点的Configuration
         IgniteConfiguration cfg = new IgniteConfiguration();
 
-        // 设置节点名称
+        // 设置该节点名称
         cfg.setIgniteInstanceName("springDataNode");
 
         // 启用Peer类加载器
         cfg.setPeerClassLoadingEnabled(true);
 
-        // 创建一个新的Cache以供Ignite节点使用
+        // 创建一个Cache的配置，名称为PersonCache
         CacheConfiguration ccfg = new CacheConfiguration("PersonCache");
 
-        // 设置SQL的Schema
+        // 设置这个Cache的键值对模型
         ccfg.setIndexedTypes(Long.class, Person.class);
 
+        // 把这个Cache放入springDataNode这个Node中
         cfg.setCacheConfiguration(ccfg);
 
+        // 启动这个节点
         return Ignition.start(cfg);
     }
 

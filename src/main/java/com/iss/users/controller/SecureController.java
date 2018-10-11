@@ -20,9 +20,4 @@ public class SecureController {
         return "Login Successful!";
     }
 
-//    @PostMapping("/user/roles")
-//    public String checkRoles(){
-//        return personService.findPersonByUsername()
-//    }
-
 }

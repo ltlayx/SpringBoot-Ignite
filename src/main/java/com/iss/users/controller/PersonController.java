@@ -2,6 +2,7 @@ package com.iss.users.controller;
 
 import com.iss.users.model.Person;
 import com.iss.users.model.ReqPerson;
+import com.iss.users.model.RespResult;
 import com.iss.users.model.Role;
 import com.iss.users.service.PersonService;
 import io.jsonwebtoken.Jwts;
@@ -11,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 /**
@@ -24,6 +28,48 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String test(HttpServletRequest request) throws UnknownHostException {
+        System.out.println(request.getRemoteAddr());
+        System.out.println(request.getRemoteHost());
+        System.out.println(InetAddress.getLocalHost().getHostAddress());
+//        String ip = null;
+//
+//        //X-Forwarded-For：Squid 服务代理
+//        String ipAddresses = request.getHeader("X-Forwarded-For");
+//
+//        if (ipAddresses == null || ipAddresses.length() == 0 || "unknown".equalsIgnoreCase(ipAddresses)) {
+//            //Proxy-Client-IP：apache 服务代理
+//            ipAddresses = request.getHeader("Proxy-Client-IP");
+//        }
+//
+//        if (ipAddresses == null || ipAddresses.length() == 0 || "unknown".equalsIgnoreCase(ipAddresses)) {
+//            //WL-Proxy-Client-IP：weblogic 服务代理
+//            ipAddresses = request.getHeader("WL-Proxy-Client-IP");
+//        }
+//
+//        if (ipAddresses == null || ipAddresses.length() == 0 || "unknown".equalsIgnoreCase(ipAddresses)) {
+//            //HTTP_CLIENT_IP：有些代理服务器
+//            ipAddresses = request.getHeader("HTTP_CLIENT_IP");
+//        }
+//
+//        if (ipAddresses == null || ipAddresses.length() == 0 || "unknown".equalsIgnoreCase(ipAddresses)) {
+//            //X-Real-IP：nginx服务代理
+//            ipAddresses = request.getHeader("X-Real-IP");
+//        }
+//
+//        //有些网络通过多层代理，那么获取到的ip就会有多个，一般都是通过逗号（,）分割开来，并且第一个ip为客户端的真实IP
+//        if (ipAddresses != null && ipAddresses.length() != 0) {
+//            ip = ipAddresses.split(",")[0];
+//        }
+//
+//        //还是不能获取到，最后再通过request.getRemoteAddr();获取
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ipAddresses)) {
+//            ip = request.getRemoteAddr();
+//        }
+        return "";
+    }
+
 
     /**
      * User register with whose username and password
@@ -32,7 +78,7 @@ public class PersonController {
      * @throws ServletException
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(@RequestBody() ReqPerson reqPerson) throws ServletException {
+    public RespResult register(@RequestBody() ReqPerson reqPerson) throws ServletException {
         // Check if username and password is null
         if (reqPerson.getUsername() == "" || reqPerson.getUsername() == null
                 || reqPerson.getPassword() == "" || reqPerson.getPassword() == null)
@@ -48,7 +94,12 @@ public class PersonController {
 
         // Create a person in ignite
         personService.save(new Person(reqPerson.getUsername(), reqPerson.getPassword(), roles));
-        return "Register Success!";
+
+        RespResult result = new RespResult();
+        result.setStatuscode("201 CREATED");
+        result.setMessage("register success");
+        result.setData("");
+        return result;
     }
 
     /**
@@ -58,7 +109,7 @@ public class PersonController {
      * @throws ServletException
      */
     @PostMapping
-    public String login(@RequestBody() ReqPerson reqPerson) throws ServletException {
+    public RespResult login(@RequestBody() ReqPerson reqPerson) throws ServletException {
         // Check if username and password is null
         if (reqPerson.getUsername() == "" || reqPerson.getUsername() == null
                 || reqPerson.getPassword() == "" || reqPerson.getPassword() == null)
@@ -74,6 +125,10 @@ public class PersonController {
         String jwtToken = Jwts.builder().setSubject(reqPerson.getUsername()).claim("roles", "member").setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS256, "secretkey").compact();
 
-        return jwtToken;
+        RespResult result = new RespResult();
+        result.setStatuscode("200 OK");
+        result.setMessage("login success");
+        result.setData(jwtToken);
+        return result;
     }
 }
